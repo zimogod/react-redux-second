@@ -1,11 +1,28 @@
 
 // 当前组件为UI组件
-
+import 'whatwg-fetch';
 import React, { Component } from 'react';
 class Home extends Component {
   constructor(props){
   	super(props)
+    this.state = {
+      user:[]
+    }
     console.log(props)
+  }
+  componentDidMount(){
+    fetch('http://localhost:3000/hot')
+    .then(res=>{
+      return res.json();
+    })
+    .then(data=>{
+      this.setState({
+        user:data
+      })
+    })
+    .catch(err=>{
+      console.log(err)
+    })
   }
   addOneClick = () =>{
     //增加一方法
@@ -43,6 +60,15 @@ class Home extends Component {
         <button onClick={this.reducerNumAsync}>减少5</button>
         <button onClick={this.addOneClick}>增加1</button>     
         <button onClick={this.addFiveClick}>增加5</button>
+        <div>
+          {
+            this.state.user.map((item,index)=>{
+              return (
+                <p key={index}>{item.userName}-{item.age}-{item.id}</p>
+              )
+            })
+          }
+        </div>
       </div>
     );
 
